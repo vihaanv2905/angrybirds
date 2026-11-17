@@ -1,0 +1,20 @@
+<Level name="L4_fortress" units="m">
+  <Birds>
+    <Bird type="BirdRed" />
+    <Bird type="BirdRed" />
+    <Bird type="BirdRed" />
+  </Birds>
+  <GameObjects>
+    <Hill vertices="24.000,0.000 30.000,0.000 29.000,4.000 25.500,4.000" />
+    <Block type="RectSmall" material="stone" x="34.7320" y="0.5970" rotation="90" />
+    <Block type="RectSmall" material="stone" x="37.2680" y="0.5970" rotation="90" />
+    <Block type="RectBig" material="wood" x="36.0000" y="1.3480" rotation="0" />
+    <Block type="RectSmall" material="wood" x="37.9320" y="0.5970" rotation="90" />
+    <Block type="RectSmall" material="wood" x="40.4680" y="0.5970" rotation="90" />
+    <Block type="RectBig" material="ice" x="39.2000" y="1.3480" rotation="0" />
+    <Block type="SquareSmall" material="wood" x="36.0000" y="1.8050" rotation="0" />
+    <Pig type="BasicMedium" x="36.0000" y="0.3220" />
+    <Pig type="BasicSmall" x="39.2000" y="0.2220" />
+    <Pig type="BasicBig" x="39.2000" y="1.9540" />
+  </GameObjects>
+</Level>
