@@ -16,7 +16,7 @@ thousands of parallel arm simulations, which is what Playground on a GPU is for.
 
 ## 0. Access (once)
 
-1. Slurm account: **`vihaanv`** (already filled into every `slurm/*.sbatch`).
+1. Slurm account: **`engin1`** (the College of Engineering shared account; `vihaanv` is not a Slurm account) (already filled into every `slurm/*.sbatch`).
    Check it with `sacctmgr show assoc user=$USER format=account%20,partition%20`.
 2. Log in: `ssh <uniqname>@greatlakes.arc-ts.umich.edu` (UMich network or VPN,
    Duo). Open OnDemand (https://greatlakes.arc-ts.umich.edu) gives a browser
@@ -24,7 +24,7 @@ thousands of parallel arm simulations, which is what Playground on a GPU is for.
 3. Put the repo in your home directory (`~`). It always exists and holds
    the venv (a few GB). A scratch directory may or may not exist for
    your account (`ls /scratch`); `slurm/common.sh` uses
-   `/scratch/vihaanv_root/vihaanv/$USER` for checkpoints if it exists, and
+   `/scratch/engin1_root/engin1/$USER` for checkpoints if it exists, and
    `$HOME/angrybirds_ckpt` otherwise.
 
 ## 1. Setup (once, on the login node)

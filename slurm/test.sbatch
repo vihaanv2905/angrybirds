@@ -2,7 +2,7 @@
 # Quick check that the environment works on a compute node (~5 min).
 #   sbatch slurm/test.sbatch
 #SBATCH --job-name=ab-test
-#SBATCH --account=vihaanv
+#SBATCH --account=engin1
 #SBATCH --partition=standard
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

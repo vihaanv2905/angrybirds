@@ -2,7 +2,7 @@
 # Ground truth for a level: try every shot (no learning).
 #   sbatch slurm/sweep.sbatch L3_reel_tower arm
 #SBATCH --job-name=ab-sweep
-#SBATCH --account=vihaanv
+#SBATCH --account=engin1
 #SBATCH --partition=standard
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

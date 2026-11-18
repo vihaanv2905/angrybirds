@@ -10,7 +10,7 @@
 # Afterwards, on the login node:
 #   git add runs/<run_name> && git commit -m "run <run_name>" && git push
 #SBATCH --job-name=aim-ppo
-#SBATCH --account=vihaanv
+#SBATCH --account=engin1
 #SBATCH --partition=standard
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

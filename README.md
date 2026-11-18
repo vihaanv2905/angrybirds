@@ -187,7 +187,7 @@ Step-by-step guide: [docs/PART2_GREATLAKES.md](docs/PART2_GREATLAKES.md).
   and it runs in Singularity on the cluster: worth learning later, more
   setup than this project needs.
 
-Great Lakes job scripts live in `slurm/` (account `vihaanv`):
+Great Lakes job scripts live in `slurm/` (account `engin1`):
 `setup_greatlakes.sh` (once), `test.sbatch`, `aim_ppo.sbatch`, `sweep.sbatch`.
 
 ## Layout

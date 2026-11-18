@@ -50,7 +50,7 @@ watching runs **live in the MuJoCo viewer**, not in matplotlib.
 - SO-101 co-simulation done with a **scripted** IK controller
   (`cosim.Controller`). It clears L3 with 2 birds (33,000 pts).
 - Stage A trainer: `train/aim_ppo.py` + `slurm/aim_ppo.sbatch` (account
-  `vihaanv`, partition `standard`). Default `--launcher arm`: policies output
+  `engin1` (shared CoE account; jobs can queue on its group CPU limit), partition `standard`). Default `--launcher arm`: policies output
   SO-101 (angle, draw) and can be watched on the robot with
   `scripts/live.py --policy runs/<name>`.
 - **Next:** read the owner's first Great Lakes runs in `runs/`, tune Stage A,

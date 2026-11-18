@@ -19,7 +19,7 @@ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 # checkpoints + TensorBoard go to scratch, not the repo
 # (Great Lakes scratch is /scratch/<account>_root/<account>/<uniqname>; falls
 #  back to $HOME if that does not exist for this account)
-export AB_CKPT_DIR="${AB_CKPT_DIR:-/scratch/vihaanv_root/vihaanv/$USER/angrybirds_ckpt}"
+export AB_CKPT_DIR="${AB_CKPT_DIR:-/scratch/engin1_root/engin1/$USER/angrybirds_ckpt}"
 mkdir -p "$AB_CKPT_DIR" 2>/dev/null || export AB_CKPT_DIR="$HOME/angrybirds_ckpt"
 mkdir -p "$AB_CKPT_DIR" logs
 echo "checkpoints -> $AB_CKPT_DIR"
