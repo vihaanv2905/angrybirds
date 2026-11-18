@@ -33,6 +33,34 @@ def _dims(ent):
     return TRIANGLE_BLOCKS.get(ent.type, (1.0, 1.0))
 
 
+def obs_size(max_pigs: int = 8, max_blocks: int = 40) -> int:
+    return 1 + max_pigs * PIG_FEATS + max_blocks * BLOCK_FEATS
+
+
+def observe(gw: GameWorld, max_pigs: int = 8, max_blocks: int = 40) -> np.ndarray:
+    """Policy observation of a live game. Also used outside the env (e.g. the
+    MuJoCo live viewer) so a trained policy sees exactly what it trained on."""
+    obs = np.zeros(obs_size(max_pigs, max_blocks), dtype=np.float32)
+    obs[0] = gw.birds_left / 3.0
+    pigs = sorted((e for e in gw.entities if e.kind == "pig"), key=lambda e: e.eid)
+    o = 1
+    for i, e in enumerate(pigs[:max_pigs]):
+        if e.alive:
+            p = e.body.position
+            obs[o + i * PIG_FEATS: o + (i + 1) * PIG_FEATS] = (p.x / X_SCALE, p.y / Y_SCALE, e.shape[1], 1.0)
+    o += max_pigs * PIG_FEATS
+    blocks = [e for e in gw.entities if e.kind == "block" and e.alive]
+    blocks.sort(key=lambda e: (e.body.position.x, e.body.position.y))
+    for i, e in enumerate(blocks[:max_blocks]):
+        p, a = e.body.position, e.body.angle
+        w, h = _dims(e)
+        m = [1.0 if e.material == k else 0.0 for k in MATS]
+        obs[o + i * BLOCK_FEATS: o + (i + 1) * BLOCK_FEATS] = (
+            p.x / X_SCALE, p.y / Y_SCALE, w / 3.0, h / 3.0, np.cos(a), np.sin(a),
+            *m, max(e.hp, 0.0) / e.max_hp, 1.0)
+    return obs
+
+
 class AngryBirdsEnv(gym.Env):
     metadata = {"render_modes": ["rgb_array"], "render_fps": 4}
 
@@ -45,6 +73,8 @@ class AngryBirdsEnv(gym.Env):
         levels       list of Level / starter-level names (default: all 4 starters)
         generator    callable(np.random.Generator) -> Level; overrides `levels`
         birds        birds per level (default: the level's own count)
+        slingshot    launcher: `Slingshot()` (reel, default) or
+                     `launchers.ArmLauncher()` (the SO-101's measured launches)
         launch_noise (angle std in deg, draw-fraction std): execution noise so
                      the agent cannot rely on knife-edge, exactly-repeatable shots
         reward_mode  "score": points / 10,000   "normalized": points / level max
@@ -67,10 +97,15 @@ class AngryBirdsEnv(gym.Env):
         self._pose_cache: dict[int, list] = {}
 
         self.action_space = spaces.Box(-1.0, 1.0, shape=(2,), dtype=np.float32)
-        n = 1 + max_pigs * PIG_FEATS + max_blocks * BLOCK_FEATS
+        n = obs_size(max_pigs, max_blocks)
         self.observation_space = spaces.Box(-np.inf, np.inf, shape=(n,), dtype=np.float32)
         self.gw: GameWorld | None = None
         self.level: Level | None = None
+
+    def set_shaping(self, value: float) -> None:
+        """Called by trainers to anneal the near-miss penalty (a method, so it
+        reaches through wrappers such as Monitor)."""
+        self.shaping = float(value)
 
     # ---------------------------------------------------------------- reset
     def reset(self, *, seed=None, options=None):
@@ -132,27 +167,7 @@ class AngryBirdsEnv(gym.Env):
 
     # ---------------------------------------------------------- observation
     def _obs(self) -> np.ndarray:
-        gw = self.gw
-        obs = np.zeros(self.observation_space.shape, dtype=np.float32)
-        obs[0] = gw.birds_left / 3.0
-        pigs = sorted((e for e in gw.entities if e.kind == "pig"), key=lambda e: e.eid)
-        o = 1
-        for i, e in enumerate(pigs[: self.max_pigs]):
-            if e.alive:
-                p = e.body.position
-                obs[o + i * PIG_FEATS: o + (i + 1) * PIG_FEATS] = (
-                    p.x / X_SCALE, p.y / Y_SCALE, e.shape[1], 1.0)
-        o += self.max_pigs * PIG_FEATS
-        blocks = [e for e in gw.entities if e.kind == "block" and e.alive]
-        blocks.sort(key=lambda e: (e.body.position.x, e.body.position.y))
-        for i, e in enumerate(blocks[: self.max_blocks]):
-            p, a = e.body.position, e.body.angle
-            w, h = _dims(e)
-            m = [1.0 if e.material == k else 0.0 for k in MATS]
-            obs[o + i * BLOCK_FEATS: o + (i + 1) * BLOCK_FEATS] = (
-                p.x / X_SCALE, p.y / Y_SCALE, w / 3.0, h / 3.0, np.cos(a), np.sin(a),
-                *m, max(e.hp, 0.0) / e.max_hp, 1.0)
-        return obs
+        return observe(self.gw, self.max_pigs, self.max_blocks)
 
     # --------------------------------------------------------------- render
     def render(self):

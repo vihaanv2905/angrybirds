@@ -1,0 +1,6 @@
+{
+  "L1_open_pig": {"score": 5000.0, "angle": -10.0, "draw": 0.976, "grid": [181, 80], "launcher": "reel"},
+  "L2_wood_shelter": {"score": 11500.0, "angle": 15.0, "draw": 0.988, "grid": [181, 80], "launcher": "reel"},
+  "L3_reel_tower": {"score": 24000.0, "angle": 65.5, "draw": 0.94, "grid": [181, 80], "launcher": "reel"},
+  "L4_fortress": {"score": 17000.0, "angle": 23.5, "draw": 0.94, "grid": [181, 80], "launcher": "reel"}
+}

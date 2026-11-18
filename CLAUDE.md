@@ -49,14 +49,22 @@ watching runs **live in the MuJoCo viewer**, not in matplotlib.
   ground-truth best shot per level.
 - SO-101 co-simulation done with a **scripted** IK controller
   (`cosim.Controller`). It clears L3 with 2 birds (33,000 pts).
-- **Next: Part 2 RL on Great Lakes.** See `docs/PART2_GREATLAKES.md`.
+- Stage A trainer: `train/aim_ppo.py` + `slurm/aim_ppo.sbatch` (account
+  `vihaanv`, partition `standard`). Default `--launcher arm`: policies output
+  SO-101 (angle, draw) and can be watched on the robot with
+  `scripts/live.py --policy runs/<name>`.
+- **Next:** read the owner's first Great Lakes runs in `runs/`, tune Stage A,
+  then build Stage B/C (π_arm in MuJoCo Playground on `spgpu`). See
+  `docs/PART2_GREATLAKES.md`.
 
 ## Conventions
 
-- Run `pytest -q` (22 tests) before committing. Physics changes need a
+- Run `pytest -q` (26 tests) before committing. Physics changes need a
   stability/energy check, not just passing tests.
 - Each MuJoCo `CoSim` is ~400 MB. Use <= 2 parallel workers on small machines.
 - Training runs write a small summary to `runs/<run_name>/` (config.yaml,
-  metrics.csv, eval.json, a short eval video). Commit those; never commit
-  checkpoints larger than a few MB.
+  metrics.csv, eval.json, baseline_random.json, policy.npz ~0.7 MB). Commit
+  those; full SB3 checkpoints stay in scratch (`$AB_CKPT_DIR`).
+- To watch a run on the robot, record it offscreen:
+  `MUJOCO_GL=egl python scripts/record_cosim.py --policy runs/<name>`.
 - Work on branches; open pull requests into `main`.

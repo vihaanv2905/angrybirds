@@ -7,6 +7,7 @@
 Options:
     --level NAME|path.xml   starter level or a level XML (default L3_reel_tower)
     --shot ANGLE,DRAW       fire this shot instead of planning (repeatable)
+    --policy runs/NAME      aim with a trained π_aim (train/aim_ppo.py, --launcher arm)
     --slowmo X              play X times slower than real time (default 1)
     --workers N             planner processes (default: all cores)
 
@@ -38,6 +39,7 @@ FPS = 60
 def parse_args():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--level", default="L3_reel_tower")
+    ap.add_argument("--policy", default=None, help="trained π_aim: runs/<name> or a policy .npz")
     ap.add_argument("--shot", action="append", default=[], help="ANGLE,DRAW e.g. 45,0.9")
     ap.add_argument("--slowmo", type=float, default=1.0)
     ap.add_argument("--workers", type=int, default=None)
@@ -51,7 +53,12 @@ def load_level(name: str) -> Level:
 def main():
     args = parse_args()
     plans = [ShotPlan(*map(float, s.split(","))) for s in args.shot]
-    show = Show(load_level(args.level), plans=plans, workers=args.workers)
+    policy = None
+    if args.policy:
+        from angrybirds.policy import NumpyPolicy
+        policy = NumpyPolicy(args.policy)
+        print("aiming with", policy.path)
+    show = Show(load_level(args.level), plans=plans, workers=args.workers, policy=policy)
     sim = show.sim
     paused = {"on": False}
 

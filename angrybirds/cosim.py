@@ -424,7 +424,7 @@ def level_from_state(gw: GameWorld) -> tuple[Level, list]:
 
 
 # ------------------------------------------------- measured launch table
-TABLE_PATH = Path(__file__).resolve().parents[1] / "robot" / "so101" / "launch_table.npz"
+from .launchers import TABLE_PATH, LaunchTable  # noqa: E402,F401  (re-exported)
 
 
 def measure_launch(angle_deg: float, draw_frac: float) -> tuple[tuple, tuple]:
@@ -439,25 +439,6 @@ def measure_launch(angle_deg: float, draw_frac: float) -> tuple[tuple, tuple]:
         sim.step()
     lg = sim.logs[-1]
     return lg.actual_game_pos, lg.actual_game_v
-
-
-class LaunchTable:
-    """(angle, draw) -> measured game release (x, y, vx, vy), bilinear."""
-
-    def __init__(self, path=TABLE_PATH):
-        z = np.load(path)
-        self.angles, self.draws, self.data = z["angles"], z["draws"], z["data"]
-
-    def __call__(self, angle: float, draw: float) -> tuple[tuple, tuple]:
-        a = np.clip(angle, self.angles[0], self.angles[-1])
-        r = np.clip(draw, self.draws[0], self.draws[-1])
-        i = min(np.searchsorted(self.angles, a, side="right") - 1, len(self.angles) - 2)
-        j = min(np.searchsorted(self.draws, r, side="right") - 1, len(self.draws) - 2)
-        ta = (a - self.angles[i]) / (self.angles[i + 1] - self.angles[i])
-        tr = (r - self.draws[j]) / (self.draws[j + 1] - self.draws[j])
-        v = ((1 - ta) * (1 - tr) * self.data[i, j] + ta * (1 - tr) * self.data[i + 1, j]
-             + (1 - ta) * tr * self.data[i, j + 1] + ta * tr * self.data[i + 1, j + 1])
-        return (float(v[0]), float(v[1])), (float(v[2]), float(v[3]))
 
 
 def _launch_for(angle, draw, table):

@@ -15,9 +15,15 @@ from .levels import Level
 
 class Show:
     def __init__(self, level: Level, plans: list[ShotPlan] | None = None,
-                 workers: int | None = None, pause: float = 0.8):
+                 workers: int | None = None, pause: float = 0.8, policy=None):
+        """policy: optional angrybirds.policy.NumpyPolicy (a trained π_aim,
+        launcher 'arm'). It aims every bird; otherwise the grid planner does."""
         self.sim = CoSim(level)
         self.fixed = list(plans or [])
+        self.policy = policy
+        if policy is not None and policy.launcher_name != "arm":
+            raise ValueError("this policy was trained with the reel launcher; the robot needs "
+                             "one trained with --launcher arm")
         self.workers = workers
         self.pause = pause                   # sim seconds between shots
         self._plan: ShotPlan | None = None
@@ -55,6 +61,12 @@ class Show:
             return
         if self.fixed:
             sim.fire(self.fixed.pop(0))
+            self._idle_since = None
+            return
+        if self.policy is not None:
+            angle, draw = self.policy.shot(gw)
+            sim.fire(ShotPlan(angle, draw))
+            self._planned_score = None
             self._idle_since = None
             return
         if self._thread is None:

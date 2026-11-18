@@ -16,48 +16,54 @@ thousands of parallel arm simulations, which is what Playground on a GPU is for.
 
 ## 0. Access (once)
 
-1. You need a Slurm **account** to charge jobs to: your PI's (or a course or
-   UMRCP allocation). Ask your advisor for the account name; below it is
-   `<acct>`.
-2. Log in: `ssh <uniqname>@greatlakes.arc-ts.umich.edu` (UMich VPN or campus
-   network; Duo 2FA). The Open OnDemand web portal gives a browser terminal,
-   file browser and a remote desktop (useful for the live viewer).
-3. Storage: home is small. Put venvs and checkpoints in scratch:
-   `/scratch/<acct>_root/<acct>/<uniqname>/`.
+1. Slurm account: **`vihaanv`** (already filled into every `slurm/*.sbatch`).
+   Check it with `sacctmgr show assoc user=$USER format=account%20,partition%20`.
+2. Log in: `ssh <uniqname>@greatlakes.arc-ts.umich.edu` (UMich network or VPN,
+   Duo). Open OnDemand (https://greatlakes.arc-ts.umich.edu) gives a browser
+   terminal, file browser and remote desktop.
+3. Keep the repo in scratch (home is small):
+   `/scratch/vihaanv_root/vihaanv/<uniqname>/`. Run `ls /scratch` to confirm
+   the path for your account; `slurm/common.sh` falls back to `$HOME` if it
+   does not exist.
 
-Module names and versions change; check with `module avail python` and adjust
-below.
-
-## 1. Environment (once, on a login node: light work only)
+## 1. Setup (once, on the login node)
 
 ```bash
-cd /scratch/<acct>_root/<acct>/$USER
+cd /scratch/vihaanv_root/vihaanv/$USER
 git clone https://github.com/vihaanv2905/angrybirds && cd angrybirds
-module load python/3.11            # or what `module avail python` lists
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-pip install "stable-baselines3[extra]" tensorboard pyyaml
-pytest -q                           # 22 tests should pass
+git checkout part2-aim-training            # until it is merged into main
+bash slurm/setup_greatlakes.sh             # venv + requirements (~5 min)
+sbatch slurm/test.sbatch                   # tests + a 3,000-shot training run
+squeue -u $USER                            # watch it; output in logs/
 ```
 
-GPU stack (π_arm), checked from a GPU job, not the login node:
+If no Python module loads, run `module avail python` and pin one:
+`export AB_PYTHON_MODULE=python/3.11.5` (add it to `~/.bashrc`).
+
+## 2. Stage A: π_aim on CPU
 
 ```bash
-pip install "jax[cuda12]" playground
-srun --account=<acct> --partition=spgpu --gpus=1 --time=00:10:00 --pty \
-     python -c "import jax; print(jax.devices())"     # expect [CudaDevice(id=0)]
+sbatch slurm/aim_ppo.sbatch a1_starter_1bird  --birds 1 --total-steps 300000
+sbatch slurm/aim_ppo.sbatch a2_starter_3birds --birds 3 --total-steps 1000000
+sbatch --time=08:00:00 slurm/aim_ppo.sbatch a3_mix --level-mix 0.8 --total-steps 5000000
 ```
 
-## 2. Stage A: π_aim on CPU (first, quick)
-
-- Env: `AngryBirdsEnv(levels=[...], launch_noise=(0.3, 0.01))`. Later
-  `generator=random_level` for unseen layouts.
-- 32–36 `SubprocVecEnv` workers on one `standard` node, ~3,000 shots/s.
-  A few million shots fit in well under an hour.
-- Measure against `scripts/sweep_level.py` (true best shot) and CMA-ES.
-- Then aim with the arm's measured launch table instead of the analytic
-  slingshot, so π_aim only asks for shots the arm can make.
-- Files to add: `train/aim_ppo.py`, `slurm/aim_ppo.sbatch`.
+- `--launcher arm` (default): the shot is (angle, draw) for the SO-101, and the
+  launch comes from its measured table. So the trained policy plays on the
+  robot directly: `python scripts/live.py --level L3_reel_tower --policy runs/a2_starter_3birds`.
+  `--launcher reel` trains on the full-size analytic slingshot instead.
+- Each evaluation plays the 4 starter levels (and, with `--level-mix`, 50
+  held-out random layouts never seen in training) with the deterministic
+  policy, logging to `runs/<name>/metrics.csv`. With `--birds 1`,
+  `frac_best_*` compares against the best shot from trying every shot
+  (`levels/sweep_best_<launcher>.json`).
+- Launch noise (0.3°, 1 % draw) is on by default so the policy cannot rely on
+  knife-edge shots; a near-miss penalty helps early learning and fades to 0
+  over the first 30 % of training.
+- Throughput: about 85 shots/s per core, so ~3,000/s on a 36-core node.
+  1M shots ≈ 6 min of simulation plus PPO updates.
+- Checkpoints and TensorBoard logs go to scratch (`$AB_CKPT_DIR`). View them
+  with `tensorboard --logdir $AB_CKPT_DIR` in an OnDemand session.
 
 ## 3. Stage B/C: π_arm in MuJoCo Playground on GPU
 

@@ -5,3 +5,4 @@ results/
 logs/
 .pytest_cache/
 MUJOCO_LOG.TXT
+checkpoints/
