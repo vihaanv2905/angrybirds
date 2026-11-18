@@ -1,0 +1,22 @@
+<Level name="L3_reel_tower" units="m">
+  <Birds>
+    <Bird type="BirdRed" />
+    <Bird type="BirdRed" />
+    <Bird type="BirdRed" />
+  </Birds>
+  <GameObjects>
+    <Block type="RectMedium" material="wood" x="31.7320" y="1.1780" rotation="90" />
+    <Block type="RectMedium" material="wood" x="34.2680" y="1.1780" rotation="90" />
+    <Block type="RectBig" material="wood" x="33.0000" y="2.5100" rotation="0" />
+    <Block type="RectSmall" material="ice" x="31.7320" y="3.2610" rotation="90" />
+    <Block type="RectSmall" material="ice" x="34.2680" y="3.2610" rotation="90" />
+    <Block type="RectBig" material="wood" x="33.0000" y="4.0120" rotation="0" />
+    <Block type="SquareSmall" material="stone" x="33.0000" y="4.4690" rotation="0" />
+    <Block type="SquareSmall" material="stone" x="35.0420" y="0.3030" rotation="0" />
+    <Block type="SquareSmall" material="stone" x="35.0420" y="0.9070" rotation="0" />
+    <Pig type="BasicMedium" x="33.0000" y="0.3220" />
+    <Pig type="BasicSmall" x="33.0000" y="2.8860" />
+    <Pig type="BasicSmall" x="33.0000" y="4.9920" />
+    <Pig type="BasicMedium" x="35.0420" y="1.5300" />
+  </GameObjects>
+</Level>

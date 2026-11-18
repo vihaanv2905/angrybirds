@@ -1,0 +1,14 @@
+<Level name="L2_wood_shelter" units="m">
+  <Birds>
+    <Bird type="BirdRed" />
+    <Bird type="BirdRed" />
+    <Bird type="BirdRed" />
+  </Birds>
+  <GameObjects>
+    <Block type="RectMedium" material="wood" x="28.7320" y="1.1780" rotation="90" />
+    <Block type="RectMedium" material="wood" x="31.2680" y="1.1780" rotation="90" />
+    <Block type="RectBig" material="wood" x="30.0000" y="2.5100" rotation="0" />
+    <Pig type="BasicSmall" x="30.0000" y="0.2220" />
+    <Pig type="BasicMedium" x="30.0000" y="2.9860" />
+  </GameObjects>
+</Level>
