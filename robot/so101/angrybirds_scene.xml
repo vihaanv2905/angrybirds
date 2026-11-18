@@ -1,0 +1,121 @@
+<!--
+  SO-101 + 1:20 tabletop slingshot. Open on its own with
+    python -m mujoco.viewer --mjcf robot/so101/angrybirds_scene.xml
+  (bands only pull when angrybirds/cosim.py drives them). The Angry Birds
+  level is added at run time by angrybirds/mj_scene.py as mocap bodies.
+
+  Frame: x downrange, z up. Robot base at the origin; the pouch rest point
+  is at (0.39, 0, 0.225) = game (0, 4.5 m) scaled by 1/20.
+-->
+<mujoco model="so101_angrybirds">
+  <include file="so101.xml"/>
+
+  <!-- 1 ms step: the bands launch the bird in ~20 ms -->
+  <option timestep="0.001"/>
+  <size memory="20M"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.35 0.35 0.35" specular="0 0 0"/>
+    <rgba haze="0.75 0.85 0.95 1"/>
+    <global azimuth="120" elevation="-18" offwidth="1920" offheight="1080"/>
+    <quality shadowsize="4096"/>
+    <map znear="0.005"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.62 0.80 0.95" rgb2="0.95 0.97 1.0" width="512" height="3072"/>
+    <texture type="2d" name="grass" builtin="checker" mark="edge" rgb1="0.55 0.72 0.38" rgb2="0.50 0.68 0.34"
+      markrgb="0.45 0.6 0.3" width="300" height="300"/>
+    <material name="grass" texture="grass" texuniform="true" texrepeat="8 8" reflectance="0.05"/>
+    <material name="sling_wood" rgba="0.42 0.27 0.14 1"/>
+    <material name="latex" rgba="0.80 0.45 0.18 1"/>
+    <material name="leather" rgba="0.30 0.18 0.10 1"/>
+    <material name="bird" rgba="0.85 0.12 0.15 1"/>
+    <material name="bird_belly" rgba="0.95 0.85 0.75 1"/>
+    <material name="beak" rgba="0.98 0.70 0.10 1"/>
+    <material name="white" rgba="1 1 1 1"/>
+    <material name="black" rgba="0.05 0.05 0.05 1"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0.8 -1.0 2.5" dir="-0.2 0.4 -1" directional="true" castshadow="true"/>
+    <geom name="floor" type="plane" size="0 0 0.05" material="grass" contype="1" conaffinity="1"/>
+
+    <camera name="overview" pos="1.15 -1.55 0.42" xyaxes="1 0 0 0 0.25 1" fovy="55"/>
+    <camera name="closeup" pos="0.62 -0.55 0.36" xyaxes="0.75 0.66 0 -0.2 0.23 0.95" fovy="50"/>
+    <body name="tower_target" pos="1.95 0 0.12"/>
+    <camera name="tower" pos="1.55 -0.85 0.32" mode="targetbody" target="tower_target" fovy="50"/>
+
+    <!-- slingshot: visual only (contype 0), fork tips carry the band anchors -->
+    <body name="slingshot" pos="0.39 0 0">
+      <geom type="capsule" fromto="0 0 0 0 0 0.10" size="0.008" material="sling_wood" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0 0.10 0 0.030 0.228" size="0.006" material="sling_wood" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0 0.10 0 -0.030 0.228" size="0.006" material="sling_wood" contype="0" conaffinity="0"/>
+      <geom type="cylinder" pos="0 0 0.002" size="0.03 0.002" material="sling_wood" contype="0" conaffinity="0"/>
+      <site name="fork_L" pos="0 0.030 0.225" size="0.003"/>
+      <site name="fork_R" pos="0 -0.030 0.225" size="0.003"/>
+    </body>
+
+    <!-- pouch: a leather cradle (back plate + two side flaps wrapping forward
+         around the bird). Bands attach at the flap tips, ahead of the centre,
+         so band tension lines the pouch up with the pull direction (like a
+         towed body). Collides only with the bird (bit 2). -->
+    <body name="pouch" pos="0.39 0 0.225">
+      <freejoint name="pouch_free"/>
+      <!-- 3 g; rotational inertia raised ~10x above a rigid plate of leather so the
+           1 ms explicit band forces stay stable (cosim also damps its spin) -->
+      <inertial pos="0.004 0 0" mass="0.003" diaginertia="4e-6 4e-6 4e-6"/>
+      <geom name="pouch" type="box" size="0.004 0.018 0.012" mass="0.002" material="leather"
+        contype="2" conaffinity="2" friction="0.8 0.005 0.0001"/>
+      <geom name="flap_L" type="box" pos="0.009 0.0195 0" size="0.009 0.0015 0.010" mass="0.0005"
+        material="leather" contype="2" conaffinity="2"/>
+      <geom name="flap_R" type="box" pos="0.009 -0.0195 0" size="0.009 0.0015 0.010" mass="0.0005"
+        material="leather" contype="2" conaffinity="2"/>
+      <site name="pouch_L" pos="0.016 0.021 0" size="0.002"/>
+      <site name="pouch_R" pos="0.016 -0.021 0" size="0.002"/>
+    </body>
+
+    <!-- the red bird: 3 cm, 20 g; decorations are massless and non-colliding -->
+    <body name="bird" pos="0.409 0 0.225">
+      <freejoint name="bird_free"/>
+      <camera name="follow_bird" mode="trackcom" pos="0 -0.6 0.08" xyaxes="1 0 0 0 0.13 1" fovy="45"/>
+      <geom name="bird" type="sphere" size="0.015" mass="0.020" material="bird"
+        contype="2" conaffinity="2" friction="0.8 0.005 0.0001"/>
+      <geom type="sphere" pos="0.006 0 -0.006" size="0.010" material="bird_belly" contype="0" conaffinity="0" mass="0"/>
+      <geom type="sphere" pos="0.011 0.005 0.005" size="0.004" material="white" contype="0" conaffinity="0" mass="0"/>
+      <geom type="sphere" pos="0.011 -0.005 0.005" size="0.004" material="white" contype="0" conaffinity="0" mass="0"/>
+      <geom type="sphere" pos="0.014 0.005 0.005" size="0.0018" material="black" contype="0" conaffinity="0" mass="0"/>
+      <geom type="sphere" pos="0.014 -0.005 0.005" size="0.0018" material="black" contype="0" conaffinity="0" mass="0"/>
+      <geom type="box" pos="0.015 0 -0.001" size="0.004 0.003 0.002" material="beak" contype="0" conaffinity="0" mass="0"/>
+      <geom type="box" pos="0.002 0 0.016" size="0.002 0.001 0.004" material="bird" contype="0" conaffinity="0" mass="0"/>
+    </body>
+  </worldbody>
+
+  <tendon>
+    <spatial name="band_L" width="0.0022" material="latex">
+      <site site="fork_L"/>
+      <site site="pouch_L"/>
+    </spatial>
+    <spatial name="band_R" width="0.0022" material="latex">
+      <site site="fork_R"/>
+      <site site="pouch_R"/>
+    </spatial>
+  </tendon>
+
+  <actuator>
+    <!-- ctrl = -tension (N); set every step from the Ogden band model -->
+    <general name="band_L" tendon="band_L" gainprm="1" biasprm="0 0 0" ctrllimited="false"/>
+    <general name="band_R" tendon="band_R" gainprm="1" biasprm="0 0 0" ctrllimited="false"/>
+  </actuator>
+
+  <equality>
+    <!-- park: pouch held at rest before the arm grabs it (body1 = world) -->
+    <weld name="park" body1="pouch" anchor="0.39 0 0.225" active="true" solref="0.004 1"/>
+    <!-- nock: bird sits in the pouch until release -->
+    <weld name="nock" body1="bird" body2="pouch" anchor="0.019 0 0" active="true" solref="0.004 1"/>
+    <!-- grip: the fingers pinch the pouch at one point but let it pivot
+         (connect = ball joint), so the bands can align it. Both anchors are
+         rewritten at grasp time (cosim.grab). -->
+    <connect name="grip" body1="pouch" body2="gripper" anchor="0 0 0" active="false" solref="0.004 1"/>
+  </equality>
+</mujoco>

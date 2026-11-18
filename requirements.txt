@@ -4,3 +4,7 @@ gymnasium>=1.0
 numpy>=1.26
 matplotlib>=3.8
 pytest>=8
+
+# Part 2: SO-101 robot co-simulation (MuJoCo)
+mujoco>=3.2
+pillow>=10      # video overlay in scripts/record_cosim.py

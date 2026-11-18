@@ -105,6 +105,7 @@ class GameWorld:
         self.entities: list[Entity] = []
         self._bird: Entity | None = None
         self._first_impact = None
+        self._shot = None
         self._build()
         if poses is not None:
             for ent, (x, y, a) in zip(self.entities, poses):
@@ -280,10 +281,22 @@ class GameWorld:
     def shoot(self, position, velocity, record_every: int = 0) -> ShotResult:
         """Fire one bird from `position` with `velocity` and simulate until
         everything comes to rest (or max_shot_time). The bird is removed after."""
+        self.begin_shot(position, velocity)
+        i = 0
+        while not self.step_shot():
+            if record_every and i % record_every == 0:
+                self._shot["frames"].append((self.time - self._shot["t0"], self.snapshot()))
+            i += 1
+        if record_every:
+            self._shot["frames"].append((self.time - self._shot["t0"], self.snapshot()))
+        return self.end_shot()
+
+    # The three calls below let a caller advance a shot one physics step at a
+    # time, e.g. in lockstep with the MuJoCo robot simulation (cosim.py).
+    def begin_shot(self, position, velocity) -> None:
         if self.birds_left <= 0:
             raise RuntimeError("no birds left")
         self.birds_left -= 1
-        t0, score0 = self.time, self.score
         bt = RED_BIRD
         body = self.world.CreateDynamicBody(position=tuple(position), bullet=True,
                                             angularDamping=bt.angular_damping)
@@ -294,41 +307,50 @@ class GameWorld:
         self._bird = Entity(-1, "bird", bt.name, None, 1, 1, 0, ("circle", bt.radius), body=body)
         body.userData = self._bird
         self._first_impact = None
+        self._shot = {
+            "t0": self.time, "score0": self.score, "i": 0, "quiet": 0.0,
+            "pigs0": [(e.body.position.x, e.body.position.y, e.shape[1]) for e in self.alive("pig")],
+            "min_d": math.inf, "traj": [], "frames": [], "events": [],
+        }
 
-        pigs0 = [(e.body.position.x, e.body.position.y, e.shape[1]) for e in self.alive("pig")]
-        min_d = math.inf
-        traj, frames, events = [], [], []
-        quiet = 0.0
+    def step_shot(self) -> bool:
+        """Advance the current shot by one physics step. Returns True when the
+        shot is over (everything at rest, all pigs dead, or time cap)."""
+        sh = self._shot
+        bt = RED_BIRD
+        sh["events"] += self._step()
+        if self._bird is not None:
+            p = self._bird.body.position
+            sh["traj"].append((p.x, p.y))
+            for (px, py, pr) in sh["pigs0"]:
+                d = math.hypot(p.x - px, p.y - py) - pr - bt.radius
+                if d < sh["min_d"]:
+                    sh["min_d"] = d
+            if p.y < WORLD_Y_MIN or p.x > WORLD_X_MAX or p.x < WORLD_X_MIN:
+                self.world.DestroyBody(self._bird.body)
+                self._bird = None
+        sh["i"] += 1
+        i = sh["i"]
         check_every = max(1, int(0.05 / self.dt))
-        n_max = int(self.cfg.max_shot_time / self.dt)
-        for i in range(n_max):
-            events += self._step()
-            if self._bird is not None:
-                p = self._bird.body.position
-                traj.append((p.x, p.y))
-                for (px, py, pr) in pigs0:
-                    d = math.hypot(p.x - px, p.y - py) - pr - bt.radius
-                    if d < min_d:
-                        min_d = d
-                if p.y < WORLD_Y_MIN or p.x > WORLD_X_MAX or p.x < WORLD_X_MIN:
-                    self.world.DestroyBody(self._bird.body)
-                    self._bird = None
-            if record_every and i % record_every == 0:
-                frames.append((self.time - t0, self.snapshot()))
-            if i % check_every == 0 and i > 0:
-                quiet = quiet + check_every * self.dt if self._all_quiet() else 0.0
-                if quiet >= self.cfg.quiet_time:
-                    break
-            if self.pigs_left == 0 and self._bird is None:
-                break
-        if record_every:
-            frames.append((self.time - t0, self.snapshot()))
+        if i % check_every == 0:
+            sh["quiet"] = sh["quiet"] + check_every * self.dt if self._all_quiet() else 0.0
+            if sh["quiet"] >= self.cfg.quiet_time:
+                return True
+        if self.pigs_left == 0 and self._bird is None:
+            return True
+        return i >= int(self.cfg.max_shot_time / self.dt)
+
+    def end_shot(self) -> ShotResult:
+        sh = self._shot
         if self._bird is not None:
             self.world.DestroyBody(self._bird.body)
             self._bird = None
+        events = sh["events"]
         pk = sum(1 for e in events if e.kind == "pig")
-        return ShotResult(score=self.score - score0, events=events, pigs_killed=pk,
+        self._shot = None
+        return ShotResult(score=self.score - sh["score0"], events=events, pigs_killed=pk,
                           blocks_destroyed=len(events) - pk, pigs_left=self.pigs_left,
-                          trajectory=traj, min_pig_distance=max(min_d, 0.0) if pigs0 else 0.0,
-                          first_impact=self._first_impact, sim_time=self.time - t0,
-                          frames=frames)
+                          trajectory=sh["traj"],
+                          min_pig_distance=max(sh["min_d"], 0.0) if sh["pigs0"] else 0.0,
+                          first_impact=self._first_impact, sim_time=self.time - sh["t0"],
+                          frames=sh["frames"])

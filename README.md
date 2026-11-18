@@ -1,4 +1,4 @@
-# Angry Birds RL: a robot arm that learns to shoot
+# Angry Birds RL: an SO-101 robot arm that learns to shoot
 
 A physics-faithful Angry Birds environment (Box2D, the engine the original
 game uses) driven by the slingshot from the "Angry Birds, with real physics"
@@ -33,12 +33,66 @@ engine and hardware suits them:
 5. **Reward:** the shot's points. With 3 birds, the next shot sees the damaged
    level.
 
+## Watch it live: SO-101 in MuJoCo
+
+![SO-101 firing the slingshot](docs/img/so101_L3_preview.png)
+
+```bash
+pip install -r requirements.txt
+python scripts/live.py --level L3_reel_tower            # Linux / Windows
+mjpython scripts/live.py --level L3_reel_tower          # macOS
+python scripts/live.py --level L4_fortress --shot 45,0.9 --slowmo 3   # fixed shot, slow motion
+```
+
+The SO-101 (from [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie/tree/main/robotstudio_so101),
+Apache-2.0, copied into `robot/so101/`) reaches for the pouch, grips it, pulls
+the latex bands back along the planned aim line, holds, and lets go. The
+bands then launch the bird physically: the pouch pushes it. When the bird
+leaves the pouch it is handed to the Box2D game, which keeps running in
+lockstep. The blocks, pigs and bird are drawn in the same MuJoCo window, so
+the whole shot plays out live in one viewer. Between birds a planner picks
+the next shot from the damaged level. Space pauses; Tab shows the panels
+(Rendering → Camera: overview / closeup / tower / follow_bird).
+`scripts/record_cosim.py` renders the same thing to MP4 without a display
+(`MUJOCO_GL=egl`, works on a cluster node).
+
+**Why a 1:20 tabletop slingshot.** The reel's slingshot needs ~500 N held at
+full draw. The SO-101's STS3215 servos give at most 2.94 N·m, which is about
+10 N at its reach. So the robot scene is a 1:20 model:
+- 3 cm, 20 g bird;
+- pouch 22.5 cm off the ground;
+- structures 1.1–2.2 m away;
+- bands 3.7 mm² latex with the same Ogden law and the same λ = 2.86 at full
+  draw, needing ~6 N to hold (the arm's holding torque is ≤ 25 % of its limit).
+
+By Froude scaling (velocities × √20, times × √20), a 4.7 m/s tabletop launch
+is exactly a 21 m/s game launch, and the game, shrunk 20× and replayed
+√20× faster, is exactly what the tabletop bird would do. The planner and the
+RL environment work in game units; the robot works in tabletop units.
+
+**How one shot runs (one clock, 1 ms MuJoCo steps)**
+
+| Phase | MuJoCo | Box2D |
+|---|---|---|
+| reach, grip | DLS inverse kinematics on the gripper; a `connect` (pivot) constraint models the pinch | idle |
+| pull, hold | IK along the aim line; Ogden band forces applied every step (`mj_step1` → forces → `mj_step2`) | idle |
+| release | fingers open; the bird rides in the pouch until the bands go slack, then flies free | — |
+| hand-off | bird pose/velocity × (20, √20) → `GameWorld.begin_shot` | starts the shot |
+| flight, impact | bird and level drawn as mocap bodies from Box2D | `step_shot` every 1/√20 ms of tabletop time |
+
+**System identification.** The real arm launch differs a few % (and a few
+degrees) from the analytic model, because of gravity during the 27 ms launch
+and the pouch dynamics. `scripts/calibrate_launch.py` fires the arm over a
+grid of (angle, draw) and stores the measured releases in
+`robot/so101/launch_table.npz`, so the planner aims with what the arm really
+does.
+
 ## Quick start
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt          # if box2d fails to build: pip install swig first
-pytest -q                                # 17 tests: physics, stability, damage, scoring, API
+pytest -q                                # 22 tests: physics, stability, damage, scoring, API, SO-101
 python scripts/sweep_level.py --level L3_reel_tower   # try every shot, write heatmap
 python scripts/make_figures.py           # level previews + best-shot videos in docs/img
 ```
@@ -115,10 +169,12 @@ exactly repeatable. Videos of the best shots are in `docs/img/best_*.mp4`.
   with `SubprocVecEnv` across a `standard` node's 36 cores. Benchmark against
   CMA-ES on fixed levels and against the sweep's best shot. Then switch to
   `generator=random_level` to learn unseen pig layouts.
-- **Stage B/C, the arm (GPU):** MuJoCo Playground (MJX or MuJoCo Warp backend,
-  Brax PPO or RSL-RL) on the `spgpu` partition (A40, 48 GB). π_arm learns to
-  hit a requested (angle, speed) within its torque limits. The band force is
-  computed in the step function using `angrybirds.slingshot`'s Ogden model.
+- **Stage B/C, the arm (GPU):** the SO-101 scene in `robot/so101/` ported to
+  MuJoCo Playground (MJX or MuJoCo Warp backend, Brax PPO or RSL-RL) on the
+  `spgpu` partition (A40, 48 GB). π_arm replaces the scripted `Controller` in
+  `angrybirds/cosim.py`: it learns to produce a requested release (angle,
+  speed) within the servo limits. The reward compares its release with the
+  target; the band forces use the same Ogden model as `cosim._bands`.
 - **Join:** measure which (angle, speed) the arm can reach and how accurately,
   then fine-tune π_aim with that arm model in the loop so it only asks for
   shots the arm can make.
@@ -143,13 +199,23 @@ angrybirds/
   generator.py   random stable levels
   env.py         Gymnasium AngryBirdsEnv (Stage A); step_launch() for Part 2
   render.py      matplotlib previews and MP4s
+  tabletop.py    1:20 tabletop slingshot + Froude scaling
+  mj_scene.py    MuJoCo model: SO-101 scene + level as mocap bodies
+  cosim.py       SO-101 controller, bands, hand-off to Box2D, planner, launch table
+  show.py        runs a whole level (plan → fire → wait → replan)
+robot/so101/     Menagerie SO-101 (Apache-2.0) + angrybirds_scene.xml, launch_table.npz
 levels/          starter levels as XML
-scripts/         sweep_level.py, make_figures.py, greatlakes_sweep.sbatch
+scripts/         live.py, record_cosim.py, calibrate_launch.py, sweep_level.py,
+                 make_figures.py, greatlakes_sweep.sbatch
 tests/           pytest suite
 ```
 
 ## Known limitations
 
+- The robot scene's level is drawn from Box2D (mocap bodies); MuJoCo does
+  not simulate the blocks itself, by design.
+- The pinch is a constraint, not a friction grasp; grip forces are not
+  simulated.
 - Only the red bird; no special birds (blue split, yellow speed-up, black
   bomb) yet.
 - SquareHole blocks are solid (no hole).
