@@ -165,6 +165,8 @@ exactly repeatable. Videos of the best shots are in `docs/img/best_*.mp4`.
 
 ## Part 2 plan: RL on Great Lakes
 
+Step-by-step guide: [docs/PART2_GREATLAKES.md](docs/PART2_GREATLAKES.md).
+
 - **Stage A, aim only (CPU):** PPO from Stable-Baselines3 on `AngryBirdsEnv`,
   with `SubprocVecEnv` across a `standard` node's 36 cores. Benchmark against
   CMA-ES on fixed levels and against the sweep's best shot. Then switch to
