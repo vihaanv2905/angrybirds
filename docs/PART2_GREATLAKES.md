@@ -21,15 +21,16 @@ thousands of parallel arm simulations, which is what Playground on a GPU is for.
 2. Log in: `ssh <uniqname>@greatlakes.arc-ts.umich.edu` (UMich network or VPN,
    Duo). Open OnDemand (https://greatlakes.arc-ts.umich.edu) gives a browser
    terminal, file browser and remote desktop.
-3. Keep the repo in scratch (home is small):
-   `/scratch/vihaanv_root/vihaanv/<uniqname>/`. Run `ls /scratch` to confirm
-   the path for your account; `slurm/common.sh` falls back to `$HOME` if it
-   does not exist.
+3. Put the repo in your home directory (`~`). It always exists and holds
+   the venv (a few GB). A scratch directory may or may not exist for
+   your account (`ls /scratch`); `slurm/common.sh` uses
+   `/scratch/vihaanv_root/vihaanv/$USER` for checkpoints if it exists, and
+   `$HOME/angrybirds_ckpt` otherwise.
 
 ## 1. Setup (once, on the login node)
 
 ```bash
-cd /scratch/vihaanv_root/vihaanv/$USER
+cd ~
 git clone https://github.com/vihaanv2905/angrybirds && cd angrybirds
 git checkout part2-aim-training            # until it is merged into main
 bash slurm/setup_greatlakes.sh             # venv + requirements (~5 min)
