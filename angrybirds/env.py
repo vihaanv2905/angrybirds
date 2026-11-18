@@ -125,6 +125,8 @@ class AngryBirdsEnv(gym.Env):
             if self.generator is not None and "level" not in options:
                 self._pose_cache.clear()        # generated levels are one-offs
             self._pose_cache[key] = GameWorld.settled_poses(self.level, self.sim)
+        if self.gw is not None:
+            self.gw.close()
         self.gw = GameWorld(self.level, self.sim, poses=self._pose_cache[key])
         self.total_score = 0
         return self._obs(), {"level": self.level.name, "max_score": self.level.max_score()}

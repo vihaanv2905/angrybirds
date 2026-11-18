@@ -10,6 +10,7 @@ blocks, the ground) do. At hp <= 0 the body is removed and points are awarded.
 from __future__ import annotations
 
 import math
+import weakref
 from dataclasses import dataclass, field
 
 from Box2D import b2ContactListener, b2EdgeShape, b2PolygonShape, b2World
@@ -64,7 +65,10 @@ class ShotResult:
 class _DamageListener(b2ContactListener):
     def __init__(self, gw: "GameWorld"):
         b2ContactListener.__init__(self)
-        self.gw = gw
+        # Weak: the b2World holds this listener from C++, where Python's
+        # garbage collector cannot see it, so a strong ref would leak the
+        # whole GameWorld (and its Box2D world) on every reset.
+        self._gw = weakref.ref(gw)
 
     def PostSolve(self, contact, impulse):
         n = contact.manifold.pointCount
@@ -75,7 +79,9 @@ class _DamageListener(b2ContactListener):
             return
         a = contact.fixtureA.body.userData
         b = contact.fixtureB.body.userData
-        gw = self.gw
+        gw = self._gw()
+        if gw is None:
+            return
         for ent, other in ((a, b), (b, a)):
             if ent is not None and ent.kind != "bird" and ent.alive:
                 dmg = total - ent.threshold * gw.dt
@@ -115,10 +121,31 @@ class GameWorld:
         elif settle:
             self.settle()
 
+    def close(self) -> None:
+        """Free the Box2D world. Safe to call twice; also run on deletion."""
+        world = self.__dict__.pop("world", None)
+        if world is None:
+            return
+        world.contactListener = None
+        for body in list(world.bodies):
+            body.userData = None          # drops pybox2d's ref to the Entity
+            world.DestroyBody(body)
+        self._listener = None
+        self.entities = []
+        self._bird = None
+
+    def __del__(self):
+        try:
+            self.close()
+        except Exception:
+            pass
+
     @staticmethod
     def settled_poses(level: Level, cfg: SimConfig | None = None) -> list[tuple[float, float, float]]:
         gw = GameWorld(level, cfg)
-        return [(e.body.position.x, e.body.position.y, e.body.angle) for e in gw.entities]
+        poses = [(e.body.position.x, e.body.position.y, e.body.angle) for e in gw.entities]
+        gw.close()
+        return poses
 
     # ---------------------------------------------------------------- build
     def _build(self) -> None:
