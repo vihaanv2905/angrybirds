@@ -28,7 +28,7 @@ from angrybirds.show import Show  # noqa: E402
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--level", default="L3_reel_tower")
+    ap.add_argument("--level", default="L3_reel_tower", help="starter name, level XML, or heldout<k>")
     ap.add_argument("--policy", default=None, help="trained π_aim: runs/<name> or a policy .npz")
     ap.add_argument("--shot", action="append", default=[])
     ap.add_argument("--out", default="docs/img/so101_live.mp4")
@@ -36,7 +36,13 @@ def main():
     ap.add_argument("--slowmo", type=float, default=2.0, help="video plays this much slower than real time")
     ap.add_argument("--max-time", type=float, default=40.0, help="sim seconds cap")
     args = ap.parse_args()
-    level = STARTER_LEVELS[args.level]() if args.level in STARTER_LEVELS else Level.load(args.level)
+    if args.level.startswith("heldout"):            # heldout<k>: k-th held-out eval layout of train/aim_ppo.py
+        from angrybirds.generator import random_level
+        rng = np.random.default_rng(10_000)              # same stream as --eval-seed 0
+        for _ in range(int(args.level[len("heldout"):]) + 1):
+            level = random_level(rng)
+    else:
+        level = STARTER_LEVELS[args.level]() if args.level in STARTER_LEVELS else Level.load(args.level)
     policy = None
     if args.policy:
         from angrybirds.policy import NumpyPolicy

@@ -26,7 +26,7 @@ done
 echo "MUJOCO_GL=${MUJOCO_GL:-none}"
 [ -n "${MUJOCO_GL:-}" ] || exit 1
 
-LEVELS="L1_open_pig L2_wood_shelter L3_reel_tower L4_fortress"
+LEVELS=${LEVELS:-"L1_open_pig L2_wood_shelter L3_reel_tower L4_fortress"}   # may include heldout<k>
 jobs=()
 for run in "$@"; do
     for lvl in $LEVELS; do jobs+=("$run $lvl"); done
