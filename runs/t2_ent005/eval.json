@@ -1,0 +1,1051 @@
+{
+  "starter": [
+    {
+      "level": "L1_open_pig",
+      "score": 25000,
+      "cleared": true,
+      "max_score": 25000,
+      "shots": [
+        {
+          "angle": 8.82,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "L2_wood_shelter",
+      "score": 31500,
+      "cleared": true,
+      "max_score": 31500,
+      "shots": [
+        {
+          "angle": 20.17,
+          "draw": 1.0,
+          "points": 31500,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "L3_reel_tower",
+      "score": 42500,
+      "cleared": true,
+      "max_score": 44500,
+      "shots": [
+        {
+          "angle": 24.13,
+          "draw": 1.0,
+          "points": 42500,
+          "pigs_killed": 4
+        }
+      ]
+    },
+    {
+      "level": "L4_fortress",
+      "score": 27500,
+      "cleared": true,
+      "max_score": 38500,
+      "shots": [
+        {
+          "angle": 25.93,
+          "draw": 1.0,
+          "points": 12500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 30.4,
+          "draw": 1.0,
+          "points": 15000,
+          "pigs_killed": 1
+        }
+      ]
+    }
+  ],
+  "heldout": [
+    {
+      "level": "gen_178690845",
+      "score": 47000,
+      "cleared": true,
+      "max_score": 48500,
+      "shots": [
+        {
+          "angle": 21.6,
+          "draw": 1.0,
+          "points": 47000,
+          "pigs_killed": 4
+        }
+      ]
+    },
+    {
+      "level": "gen_088292216",
+      "score": 44500,
+      "cleared": true,
+      "max_score": 47000,
+      "shots": [
+        {
+          "angle": 16.46,
+          "draw": 1.0,
+          "points": 44500,
+          "pigs_killed": 4
+        }
+      ]
+    },
+    {
+      "level": "gen_149158697",
+      "score": 35000,
+      "cleared": true,
+      "max_score": 37000,
+      "shots": [
+        {
+          "angle": 15.53,
+          "draw": 1.0,
+          "points": 35000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_896636591",
+      "score": 25000,
+      "cleared": true,
+      "max_score": 25500,
+      "shots": [
+        {
+          "angle": 11.0,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_892003844",
+      "score": 13000,
+      "cleared": false,
+      "max_score": 38500,
+      "shots": [
+        {
+          "angle": 14.63,
+          "draw": 1.0,
+          "points": 12500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 13.64,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 13.63,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_502140051",
+      "score": 19500,
+      "cleared": false,
+      "max_score": 47000,
+      "shots": [
+        {
+          "angle": 26.29,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 25.42,
+          "draw": 1.0,
+          "points": 8000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 17.48,
+          "draw": 1.0,
+          "points": 11000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_646379871",
+      "score": 25000,
+      "cleared": true,
+      "max_score": 26000,
+      "shots": [
+        {
+          "angle": 36.62,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_950676117",
+      "score": 39500,
+      "cleared": true,
+      "max_score": 51500,
+      "shots": [
+        {
+          "angle": 18.91,
+          "draw": 1.0,
+          "points": 23500,
+          "pigs_killed": 4
+        },
+        {
+          "angle": 11.11,
+          "draw": 1.0,
+          "points": 16000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_580620139",
+      "score": 31000,
+      "cleared": true,
+      "max_score": 45500,
+      "shots": [
+        {
+          "angle": 20.86,
+          "draw": 1.0,
+          "points": 11500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 22.66,
+          "draw": 1.0,
+          "points": 19500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_039321035",
+      "score": 25500,
+      "cleared": true,
+      "max_score": 27000,
+      "shots": [
+        {
+          "angle": 15.77,
+          "draw": 1.0,
+          "points": 25500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_655283058",
+      "score": 31500,
+      "cleared": true,
+      "max_score": 47500,
+      "shots": [
+        {
+          "angle": 23.2,
+          "draw": 1.0,
+          "points": 13000,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 18.85,
+          "draw": 1.0,
+          "points": 18500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_836427488",
+      "score": 31000,
+      "cleared": true,
+      "max_score": 32000,
+      "shots": [
+        {
+          "angle": 16.82,
+          "draw": 1.0,
+          "points": 31000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_677739008",
+      "score": 12000,
+      "cleared": true,
+      "max_score": 33000,
+      "shots": [
+        {
+          "angle": 19.5,
+          "draw": 1.0,
+          "points": 6000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 25.15,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 26.59,
+          "draw": 1.0,
+          "points": 5500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_1054585425",
+      "score": 17000,
+      "cleared": true,
+      "max_score": 38000,
+      "shots": [
+        {
+          "angle": 24.56,
+          "draw": 1.0,
+          "points": 10500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 29.7,
+          "draw": 1.0,
+          "points": 1000,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 27.29,
+          "draw": 1.0,
+          "points": 5500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_886911474",
+      "score": 36500,
+      "cleared": true,
+      "max_score": 39500,
+      "shots": [
+        {
+          "angle": 20.29,
+          "draw": 1.0,
+          "points": 36500,
+          "pigs_killed": 3
+        }
+      ]
+    },
+    {
+      "level": "gen_952353041",
+      "score": 22000,
+      "cleared": true,
+      "max_score": 33000,
+      "shots": [
+        {
+          "angle": 17.26,
+          "draw": 1.0,
+          "points": 6500,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 12.06,
+          "draw": 1.0,
+          "points": 15500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_967668468",
+      "score": 20000,
+      "cleared": true,
+      "max_score": 41500,
+      "shots": [
+        {
+          "angle": 30.88,
+          "draw": 1.0,
+          "points": 13000,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 21.89,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 19.46,
+          "draw": 1.0,
+          "points": 6500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_709334559",
+      "score": 29000,
+      "cleared": true,
+      "max_score": 30500,
+      "shots": [
+        {
+          "angle": 11.84,
+          "draw": 1.0,
+          "points": 29000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_226370096",
+      "score": 29000,
+      "cleared": true,
+      "max_score": 33000,
+      "shots": [
+        {
+          "angle": 22.9,
+          "draw": 1.0,
+          "points": 29000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_995474145",
+      "score": 31000,
+      "cleared": true,
+      "max_score": 33000,
+      "shots": [
+        {
+          "angle": 22.29,
+          "draw": 1.0,
+          "points": 31000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_003690099",
+      "score": 22000,
+      "cleared": true,
+      "max_score": 43000,
+      "shots": [
+        {
+          "angle": 26.94,
+          "draw": 1.0,
+          "points": 12500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 27.61,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 33.63,
+          "draw": 1.0,
+          "points": 9000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_174252790",
+      "score": 20000,
+      "cleared": true,
+      "max_score": 31000,
+      "shots": [
+        {
+          "angle": 20.9,
+          "draw": 1.0,
+          "points": 5000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 24.46,
+          "draw": 1.0,
+          "points": 15000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_288720350",
+      "score": 25000,
+      "cleared": true,
+      "max_score": 25500,
+      "shots": [
+        {
+          "angle": 7.61,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_535068193",
+      "score": 25000,
+      "cleared": false,
+      "max_score": 50000,
+      "shots": [
+        {
+          "angle": 19.79,
+          "draw": 1.0,
+          "points": 6000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 21.51,
+          "draw": 1.0,
+          "points": 17500,
+          "pigs_killed": 3
+        },
+        {
+          "angle": 13.65,
+          "draw": 1.0,
+          "points": 1500,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_712324180",
+      "score": 26500,
+      "cleared": true,
+      "max_score": 38000,
+      "shots": [
+        {
+          "angle": 18.99,
+          "draw": 1.0,
+          "points": 11000,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 18.22,
+          "draw": 1.0,
+          "points": 15500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_723213808",
+      "score": 28000,
+      "cleared": true,
+      "max_score": 38000,
+      "shots": [
+        {
+          "angle": 31.2,
+          "draw": 1.0,
+          "points": 12500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 16.79,
+          "draw": 1.0,
+          "points": 15500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_037545498",
+      "score": 8000,
+      "cleared": false,
+      "max_score": 35000,
+      "shots": [
+        {
+          "angle": 24.67,
+          "draw": 1.0,
+          "points": 1500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 20.78,
+          "draw": 1.0,
+          "points": 5500,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 22.81,
+          "draw": 1.0,
+          "points": 1000,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_424820999",
+      "score": 25000,
+      "cleared": true,
+      "max_score": 26000,
+      "shots": [
+        {
+          "angle": 21.33,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_185254752",
+      "score": 26000,
+      "cleared": true,
+      "max_score": 27000,
+      "shots": [
+        {
+          "angle": 27.23,
+          "draw": 1.0,
+          "points": 26000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_140120808",
+      "score": 12500,
+      "cleared": false,
+      "max_score": 39000,
+      "shots": [
+        {
+          "angle": 17.78,
+          "draw": 1.0,
+          "points": 7500,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 13.93,
+          "draw": 1.0,
+          "points": 5000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 8.94,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_150610386",
+      "score": 0,
+      "cleared": false,
+      "max_score": 26000,
+      "shots": [
+        {
+          "angle": 25.55,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 25.57,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 25.63,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_582110074",
+      "score": 14500,
+      "cleared": false,
+      "max_score": 42000,
+      "shots": [
+        {
+          "angle": 22.23,
+          "draw": 1.0,
+          "points": 1500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 26.06,
+          "draw": 1.0,
+          "points": 11500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 16.78,
+          "draw": 1.0,
+          "points": 1500,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_061751184",
+      "score": 21500,
+      "cleared": true,
+      "max_score": 31500,
+      "shots": [
+        {
+          "angle": 29.88,
+          "draw": 1.0,
+          "points": 6500,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 18.88,
+          "draw": 1.0,
+          "points": 15000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_399229970",
+      "score": 11500,
+      "cleared": false,
+      "max_score": 42500,
+      "shots": [
+        {
+          "angle": 25.12,
+          "draw": 1.0,
+          "points": 2000,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 23.57,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 28.49,
+          "draw": 1.0,
+          "points": 9500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_522875085",
+      "score": 39500,
+      "cleared": true,
+      "max_score": 40000,
+      "shots": [
+        {
+          "angle": 20.03,
+          "draw": 1.0,
+          "points": 39500,
+          "pigs_killed": 3
+        }
+      ]
+    },
+    {
+      "level": "gen_454278823",
+      "score": 11000,
+      "cleared": true,
+      "max_score": 31500,
+      "shots": [
+        {
+          "angle": 25.48,
+          "draw": 1.0,
+          "points": 5000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 27.37,
+          "draw": 1.0,
+          "points": 1000,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 28.98,
+          "draw": 1.0,
+          "points": 5000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_972527514",
+      "score": 17500,
+      "cleared": true,
+      "max_score": 28500,
+      "shots": [
+        {
+          "angle": 25.3,
+          "draw": 1.0,
+          "points": 2000,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 23.11,
+          "draw": 1.0,
+          "points": 15500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_781433435",
+      "score": 27500,
+      "cleared": true,
+      "max_score": 28500,
+      "shots": [
+        {
+          "angle": 30.32,
+          "draw": 1.0,
+          "points": 27500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_247609743",
+      "score": 15500,
+      "cleared": true,
+      "max_score": 26500,
+      "shots": [
+        {
+          "angle": 14.4,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 22.19,
+          "draw": 1.0,
+          "points": 15000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_900707743",
+      "score": 27000,
+      "cleared": true,
+      "max_score": 29500,
+      "shots": [
+        {
+          "angle": 34.64,
+          "draw": 1.0,
+          "points": 27000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_580279992",
+      "score": 21500,
+      "cleared": true,
+      "max_score": 31500,
+      "shots": [
+        {
+          "angle": 15.16,
+          "draw": 1.0,
+          "points": 6000,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 18.61,
+          "draw": 1.0,
+          "points": 15500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_652551168",
+      "score": 28000,
+      "cleared": false,
+      "max_score": 55000,
+      "shots": [
+        {
+          "angle": 19.7,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 4
+        },
+        {
+          "angle": 22.24,
+          "draw": 1.0,
+          "points": 1500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 20.61,
+          "draw": 1.0,
+          "points": 1500,
+          "pigs_killed": 0
+        }
+      ]
+    },
+    {
+      "level": "gen_537431071",
+      "score": 27000,
+      "cleared": true,
+      "max_score": 48500,
+      "shots": [
+        {
+          "angle": 26.72,
+          "draw": 1.0,
+          "points": 15000,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 24.65,
+          "draw": 1.0,
+          "points": 5500,
+          "pigs_killed": 1
+        },
+        {
+          "angle": 24.06,
+          "draw": 1.0,
+          "points": 6500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_016683794",
+      "score": 48500,
+      "cleared": true,
+      "max_score": 49500,
+      "shots": [
+        {
+          "angle": 20.12,
+          "draw": 1.0,
+          "points": 48500,
+          "pigs_killed": 4
+        }
+      ]
+    },
+    {
+      "level": "gen_124924069",
+      "score": 34000,
+      "cleared": true,
+      "max_score": 35500,
+      "shots": [
+        {
+          "angle": 22.59,
+          "draw": 1.0,
+          "points": 34000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_143213561",
+      "score": 33000,
+      "cleared": true,
+      "max_score": 34000,
+      "shots": [
+        {
+          "angle": 30.13,
+          "draw": 1.0,
+          "points": 33000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_435342649",
+      "score": 19500,
+      "cleared": true,
+      "max_score": 41500,
+      "shots": [
+        {
+          "angle": 22.0,
+          "draw": 1.0,
+          "points": 13500,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 14.48,
+          "draw": 1.0,
+          "points": 500,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 15.96,
+          "draw": 1.0,
+          "points": 5500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_318733655",
+      "score": 31500,
+      "cleared": true,
+      "max_score": 32500,
+      "shots": [
+        {
+          "angle": 14.59,
+          "draw": 1.0,
+          "points": 31500,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "gen_139428633",
+      "score": 27000,
+      "cleared": true,
+      "max_score": 31500,
+      "shots": [
+        {
+          "angle": 29.31,
+          "draw": 1.0,
+          "points": 27000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "gen_070125742",
+      "score": 35000,
+      "cleared": true,
+      "max_score": 38000,
+      "shots": [
+        {
+          "angle": 23.08,
+          "draw": 1.0,
+          "points": 35000,
+          "pigs_killed": 2
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "score_L1_open_pig": 25000,
+    "score_L2_wood_shelter": 31500,
+    "score_L3_reel_tower": 42500,
+    "score_L4_fortress": 27500,
+    "heldout_mean_score": 25450.0,
+    "heldout_clear_rate": 0.82,
+    "heldout_mean_frac_max": 0.7073
+  },
+  "config": {
+    "run_name": "t2_ent005",
+    "launcher": "arm",
+    "birds": 3,
+    "level_mix": 0.8,
+    "total_steps": 2000000
+  },
+  "random_baseline": {
+    "score_L1_open_pig": 0,
+    "score_L2_wood_shelter": 5500,
+    "score_L3_reel_tower": 0,
+    "score_L4_fortress": 0,
+    "heldout_mean_score": 6550.0,
+    "heldout_clear_rate": 0.2,
+    "heldout_mean_frac_max": 0.1739
+  }
+}
