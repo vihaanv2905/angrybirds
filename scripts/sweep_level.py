@@ -22,16 +22,16 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from angrybirds.config import SimConfig  # noqa: E402
 from angrybirds.levels import STARTER_LEVELS, Level  # noqa: E402
-from angrybirds.slingshot import Slingshot  # noqa: E402
+from angrybirds.launchers import make_launcher  # noqa: E402
 from angrybirds.world import GameWorld  # noqa: E402
 
 _G = {}
 
 
-def _init(level_xml: str, drag: bool):
+def _init(level_xml: str, drag: bool, launcher: str):
     lvl = Level.from_xml(level_xml)
     cfg = SimConfig(drag=drag)
-    _G.update(level=lvl, cfg=cfg, poses=GameWorld.settled_poses(lvl, cfg), sling=Slingshot())
+    _G.update(level=lvl, cfg=cfg, poses=GameWorld.settled_poses(lvl, cfg), sling=make_launcher(launcher))
 
 
 def _shot(args):
@@ -42,15 +42,15 @@ def _shot(args):
     return i, j, r.score, r.pigs_killed, r.min_pig_distance
 
 
-def sweep(level: Level, n_angles=181, n_draws=80, workers=None, drag=False):
-    s = Slingshot()
+def sweep(level: Level, n_angles=181, n_draws=80, workers=None, drag=False, launcher="reel"):
+    s = make_launcher(launcher)
     angles = np.linspace(s.min_angle, s.max_angle, n_angles)
     draws = np.linspace(s.min_draw_frac, 1.0, n_draws)
     jobs = [(i, j, a, d) for i, a in enumerate(angles) for j, d in enumerate(draws)]
     score = np.zeros((n_angles, n_draws))
     pigs = np.zeros((n_angles, n_draws), dtype=int)
     mind = np.zeros((n_angles, n_draws))
-    with Pool(workers or os.cpu_count(), initializer=_init, initargs=(level.to_xml(), drag)) as pool:
+    with Pool(workers or os.cpu_count(), initializer=_init, initargs=(level.to_xml(), drag, launcher)) as pool:
         for i, j, sc, pk, md in pool.imap_unordered(_shot, jobs, chunksize=64):
             score[i, j], pigs[i, j], mind[i, j] = sc, pk, md
     return angles, draws, score, pigs, mind
@@ -67,7 +67,7 @@ def plot(level, angles, draws, score, pigs, path):
     i, j = np.unravel_index(np.argmax(score), score.shape)
     for ax in axes:
         ax.plot(draws[j] * 100, angles[i], "r*", ms=14, mec="w")
-        ax.set_xlabel("draw (% of 0.67 m)")
+        ax.set_xlabel("draw (% of full draw)")
         ax.set_ylabel("launch angle (deg)")
     axes[0].set_title(f"{level.name}: best {score[i, j]:.0f} at {angles[i]:.1f} deg, {draws[j]*100:.0f}% draw")
     im2 = axes[1].imshow(pigs, origin="lower", aspect="auto", extent=ext, cmap="magma",
@@ -86,19 +86,31 @@ def main():
     ap.add_argument("--draws", type=int, default=80)
     ap.add_argument("--workers", type=int, default=None)
     ap.add_argument("--drag", action="store_true")
+    ap.add_argument("--launcher", default="reel", choices=["reel", "arm"],
+                    help="reel = full-size analytic slingshot; arm = SO-101 measured launches")
+    ap.add_argument("--best-json", default=None,
+                    help="also record the best first-shot score in this JSON (e.g. levels/sweep_best_arm.json)")
     ap.add_argument("--out", default="results/sweeps")
     args = ap.parse_args()
     level = STARTER_LEVELS[args.level]() if args.level in STARTER_LEVELS else Level.load(args.level)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     t = time.time()
-    angles, draws, score, pigs, mind = sweep(level, args.angles, args.draws, args.workers, args.drag)
+    angles, draws, score, pigs, mind = sweep(level, args.angles, args.draws, args.workers, args.drag,
+                                             args.launcher)
     n = score.size
     dt = time.time() - t
-    tag = level.name + ("_drag" if args.drag else "")
+    tag = level.name + ("_drag" if args.drag else "") + ("_arm" if args.launcher == "arm" else "")
     np.savez(out / f"{tag}.npz", angles=angles, draws=draws, score=score, pigs=pigs, min_pig_distance=mind)
     plot(level, angles, draws, score, pigs, out / f"{tag}.png")
     i, j = np.unravel_index(np.argmax(score), score.shape)
+    if args.best_json:
+        import json
+        bj = Path(args.best_json)
+        best = json.loads(bj.read_text()) if bj.exists() else {}
+        best[level.name] = {"score": float(score[i, j]), "angle": float(angles[i]), "draw": float(draws[j]),
+                            "grid": [len(angles), len(draws)], "launcher": args.launcher}
+        bj.write_text(json.dumps(best, indent=2) + "\n")
     print(f"{tag}: {n} shots in {dt:.1f}s ({n/dt:.0f}/s). best {score[i, j]:.0f} "
           f"at angle {angles[i]:.1f} deg, draw {draws[j]:.3f}; "
           f"{(score > 0).mean()*100:.1f}% of shots score, "

@@ -1,0 +1,88 @@
+{
+  "starter": [
+    {
+      "level": "L1_open_pig",
+      "score": 5000,
+      "cleared": true,
+      "max_score": 5000,
+      "shots": [
+        {
+          "angle": 3.79,
+          "draw": 1.0,
+          "points": 5000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "L2_wood_shelter",
+      "score": 5500,
+      "cleared": false,
+      "max_score": 11500,
+      "shots": [
+        {
+          "angle": 15.24,
+          "draw": 1.0,
+          "points": 5500,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "L3_reel_tower",
+      "score": 17500,
+      "cleared": false,
+      "max_score": 24500,
+      "shots": [
+        {
+          "angle": 20.91,
+          "draw": 1.0,
+          "points": 17500,
+          "pigs_killed": 3
+        }
+      ]
+    },
+    {
+      "level": "L4_fortress",
+      "score": 6000,
+      "cleared": false,
+      "max_score": 18500,
+      "shots": [
+        {
+          "angle": 60.12,
+          "draw": 1.0,
+          "points": 6000,
+          "pigs_killed": 1
+        }
+      ]
+    }
+  ],
+  "heldout": [],
+  "summary": {
+    "score_L1_open_pig": 5000,
+    "frac_best_L1_open_pig": 1.0,
+    "score_L2_wood_shelter": 5500,
+    "frac_best_L2_wood_shelter": 0.478,
+    "score_L3_reel_tower": 17500,
+    "frac_best_L3_reel_tower": 0.729,
+    "score_L4_fortress": 6000,
+    "frac_best_L4_fortress": 0.353
+  },
+  "config": {
+    "run_name": "a1_starter_1bird",
+    "launcher": "arm",
+    "birds": 1,
+    "level_mix": 0.0,
+    "total_steps": 300000
+  },
+  "random_baseline": {
+    "score_L1_open_pig": 0,
+    "frac_best_L1_open_pig": 0.0,
+    "score_L2_wood_shelter": 0,
+    "frac_best_L2_wood_shelter": 0.0,
+    "score_L3_reel_tower": 0,
+    "frac_best_L3_reel_tower": 0.0,
+    "score_L4_fortress": 0,
+    "frac_best_L4_fortress": 0.0
+  }
+}

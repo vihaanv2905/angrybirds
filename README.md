@@ -92,7 +92,7 @@ does.
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt          # if box2d fails to build: pip install swig first
-pytest -q                                # 22 tests: physics, stability, damage, scoring, API, SO-101
+pytest -q                                # 26 tests: physics, stability, damage, scoring, API, SO-101, training
 python scripts/sweep_level.py --level L3_reel_tower   # try every shot, write heatmap
 python scripts/make_figures.py           # level previews + best-shot videos in docs/img
 ```
@@ -187,8 +187,8 @@ Step-by-step guide: [docs/PART2_GREATLAKES.md](docs/PART2_GREATLAKES.md).
   and it runs in Singularity on the cluster: worth learning later, more
   setup than this project needs.
 
-`scripts/greatlakes_sweep.sbatch` is a CPU job template:
-`sbatch --account=<acct> scripts/greatlakes_sweep.sbatch L4_fortress`.
+Great Lakes job scripts live in `slurm/` (account `engin1`):
+`setup_greatlakes.sh` (once), `test.sbatch`, `aim_ppo.sbatch`, `sweep.sbatch`.
 
 ## Layout
 
@@ -205,10 +205,14 @@ angrybirds/
   mj_scene.py    MuJoCo model: SO-101 scene + level as mocap bodies
   cosim.py       SO-101 controller, bands, hand-off to Box2D, planner, launch table
   show.py        runs a whole level (plan → fire → wait → replan)
+  launchers.py   reel slingshot vs the SO-101's measured launches (same interface)
+  policy.py      runs an exported π_aim (numpy only) — e.g. in the live viewer
 robot/so101/     Menagerie SO-101 (Apache-2.0) + angrybirds_scene.xml, launch_table.npz
 levels/          starter levels as XML
-scripts/         live.py, record_cosim.py, calibrate_launch.py, sweep_level.py,
-                 make_figures.py, greatlakes_sweep.sbatch
+scripts/         live.py, record_cosim.py, calibrate_launch.py, sweep_level.py, make_figures.py
+train/           aim_ppo.py (Stage A: π_aim with PPO)
+slurm/           Great Lakes setup + job scripts
+runs/            committed run summaries (metrics, eval, policy.npz)
 tests/           pytest suite
 ```
 

@@ -1,0 +1,104 @@
+{
+  "starter": [
+    {
+      "level": "L1_open_pig",
+      "score": 25000,
+      "cleared": true,
+      "max_score": 25000,
+      "shots": [
+        {
+          "angle": 4.14,
+          "draw": 1.0,
+          "points": 25000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "L2_wood_shelter",
+      "score": 31000,
+      "cleared": true,
+      "max_score": 31500,
+      "shots": [
+        {
+          "angle": 21.41,
+          "draw": 1.0,
+          "points": 31000,
+          "pigs_killed": 2
+        }
+      ]
+    },
+    {
+      "level": "L3_reel_tower",
+      "score": 22500,
+      "cleared": true,
+      "max_score": 44500,
+      "shots": [
+        {
+          "angle": 25.28,
+          "draw": 1.0,
+          "points": 17500,
+          "pigs_killed": 3
+        },
+        {
+          "angle": 26.82,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 27.22,
+          "draw": 1.0,
+          "points": 5000,
+          "pigs_killed": 1
+        }
+      ]
+    },
+    {
+      "level": "L4_fortress",
+      "score": 12000,
+      "cleared": false,
+      "max_score": 38500,
+      "shots": [
+        {
+          "angle": 60.49,
+          "draw": 1.0,
+          "points": 11000,
+          "pigs_killed": 2
+        },
+        {
+          "angle": 61.18,
+          "draw": 1.0,
+          "points": 1000,
+          "pigs_killed": 0
+        },
+        {
+          "angle": 60.42,
+          "draw": 1.0,
+          "points": 0,
+          "pigs_killed": 0
+        }
+      ]
+    }
+  ],
+  "heldout": [],
+  "summary": {
+    "score_L1_open_pig": 25000,
+    "score_L2_wood_shelter": 31000,
+    "score_L3_reel_tower": 22500,
+    "score_L4_fortress": 12000
+  },
+  "config": {
+    "run_name": "a2_starter_3birds",
+    "launcher": "arm",
+    "birds": 3,
+    "level_mix": 0.0,
+    "total_steps": 1000000
+  },
+  "random_baseline": {
+    "score_L1_open_pig": 0,
+    "score_L2_wood_shelter": 5500,
+    "score_L3_reel_tower": 0,
+    "score_L4_fortress": 0
+  }
+}

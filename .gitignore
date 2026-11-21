@@ -5,3 +5,7 @@ results/
 logs/
 .pytest_cache/
 MUJOCO_LOG.TXT
+checkpoints/
+
+# demo videos stay out of git (regenerate with slurm/ghosts.sbatch)
+docs/img/*.mp4
